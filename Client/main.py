@@ -18,5 +18,7 @@ if __name__ == '__main__':
     try:
         client.request_frame(lambda frame: recognize(rec, frame))
     except Exception:
+        result = rec.get_result()
+        print(result)
         client.send_link("https://google.com")
         cv2.destroyAllWindows()

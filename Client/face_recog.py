@@ -46,7 +46,9 @@ class FaceRec:
 
             if matches[matchIndex]:
                 avgfaceDis = sum(faceDis)/5
-                self.avgfd.append(avgfaceDis)
+                self.avgfd.append(1 - avgfaceDis)
+
+        return img
 
     def clean_list(self):
         self.avgfd = []
