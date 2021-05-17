@@ -4,14 +4,20 @@ import face_recognition
 import os
 
 
+
+
 class FaceRec:
-    def __init__(self, path='ImagesAttendance'):
+    def __init__(self, path):
         images = []
+        self.avgfd = []
         self.classNames = []
-        for cl in os.listdir(path):
+        myList = os.listdir(path)
+        print(myList)
+        for cl in myList:
             curImg = cv2.imread(f'{path}/{cl}')
             images.append(curImg)
             self.classNames.append(os.path.splitext(cl)[0])
+            print(self.classNames)
 
         def findEncodings(images):
             encodeList = []
@@ -32,17 +38,18 @@ class FaceRec:
         encodesCurFrame = face_recognition.face_encodings(imgS, facesCurFrame)
 
         for encodeFace, faceLoc in zip(encodesCurFrame, facesCurFrame):
-            matches = face_recognition.compare_faces(self.encodeListKnown, encodeFace)
-            faceDis = face_recognition.face_distance(self.encodeListKnown, encodeFace)
+            matches = face_recognition.\
+                compare_faces(self.encodeListKnown, encodeFace)
+            faceDis = face_recognition.\
+                face_distance(self.encodeListKnown, encodeFace)
             matchIndex = np.argmin(faceDis)
 
             if matches[matchIndex]:
-                name = self.classNames[matchIndex].upper()
-                y1, x2, y2, x1 = faceLoc
-                y1, x2, y2, x1 = y1*4, x2*4, y2*4, x1*4
-                cv2.rectangle(img, (x1, y1), (x2, y2), (0, 255, 0), 2)
-                cv2.rectangle(img, (x1, y2-35), (x2, y2), (0, 255, 0),
-                              cv2.FILLED)
-                cv2.putText(img, name, (x1+6, y2-6),
-                            cv2.FONT_HERSHEY_COMPLEX, 1, (255, 255, 255), 2)
-        return img
+                avgfaceDis = sum(faceDis)/5
+                self.avgfd.append(avgfaceDis)
+
+    def clean_list(self):
+        self.avgfd = []
+
+    def get_result(self):
+        return self.avgfd.copy()
