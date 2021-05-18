@@ -4,8 +4,6 @@ import face_recognition
 import os
 
 
-
-
 class FaceRec:
     def __init__(self, path):
         images = []
