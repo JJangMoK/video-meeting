@@ -10,6 +10,7 @@ def byte_to_frame(chunk, shape):
 
 class Client:
     def __init__(self, url, frame_per_sec=30):
+        # need url exception handling
         self.url = url
         self.frame_per_sec = frame_per_sec
         info = requests.get(url + "/info")
@@ -29,5 +30,5 @@ class Client:
                 time.sleep(1/self.frame_per_sec)
 
     def send_link(self, zoom_link):
-        ans = requests.post(self.url + "/open_link", data={"url" : zoom_link})
+        ans = requests.post(self.url + "/open_link", data={"url": zoom_link})
         return ans.status_code != 400 
