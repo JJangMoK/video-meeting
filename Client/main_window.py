@@ -5,6 +5,7 @@ from PyQt5.QtGui import *
 from PyQt5 import uic
 from client import Client
 from threading import Lock
+from threading import Thread
 from alarm import Alarm
 import cv2
 
@@ -25,11 +26,19 @@ class TestWindow(QMainWindow, form_class):
         self.find_pic_button.clicked.connect(self.set_picture_location)
         self.meeting_button.clicked.connect(self.start_action)
         self.rec = None
+        self.encoding_thread = None
 
     def set_picture_location(self):
+        def worker(f):
+            self.rec = FaceRec(f)
+
         f = str(QFileDialog.getExistingDirectory(self, "Select Directory"))
         self.picture_edit.setText(f)
-        self.rec = FaceRec(f)
+        if self.encoding_thread and self.encoding_thread.is_alive():
+            self.__print_console("Wait for encoding!")
+            self.encoding_thread.join()
+        self.encoding_thread = Thread(target=lambda: worker(f))
+        self.encoding_thread.start()
 
     def start_action(self):
         if self.picture_edit.text() and self.zoom_edit.text()\
