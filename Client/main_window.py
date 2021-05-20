@@ -59,7 +59,7 @@ class TestWindow(QMainWindow, form_class):
                 if accepted:
                     client.send_link(self.zoom_edit.text())
                 else:
-                    self.__print_console("canceled")
+                    self.__print_console("Canceled")
                 # need toplevel to get confirmation from user
             except Exception as e:
                 for message in e.args:

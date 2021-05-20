@@ -11,7 +11,7 @@ def convert_cv2img_to_PyQtPixMap(img):
 
 
 class ConfirmDialog(QDialog, form_class):
-    def __init__(self, parent, img_to_show):
+    def __init__(self, parent, img_to_show, percent=0):
         super().__init__()
         self.setupUi(self)
         self.setWindowTitle("Confirm Meeting")
@@ -20,3 +20,4 @@ class ConfirmDialog(QDialog, form_class):
         pixmap = convert_cv2img_to_PyQtPixMap(img_to_show)
         self.picture_label.setPixmap(pixmap)
         self.picture_label.resize(pixmap.width(), pixmap.height())
+        self.percent_label.setText(str(percent))

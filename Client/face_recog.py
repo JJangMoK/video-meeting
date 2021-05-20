@@ -42,8 +42,7 @@ class FaceRec:
                 face_distance(self.encodeListKnown, encodeFace)
             # matchIndex = np.argmin(faceDis)
 
-            avgfaceDis = sum(faceDis)/len(faceDis)
-            self.avgfd.append(tuple([1-avgfaceDis, img]))
+            self.avgfd.append(tuple([1-min(faceDis), img]))
 
         return img
 
