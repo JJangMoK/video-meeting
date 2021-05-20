@@ -29,9 +29,9 @@
   <widget class="QLineEdit" name="zoom_edit">
    <property name="geometry">
     <rect>
-     <x>110</x>
+     <x>130</x>
      <y>80</y>
-     <width>701</width>
+     <width>681</width>
      <height>21</height>
     </rect>
    </property>
@@ -68,9 +68,9 @@
    </property>
    <property name="geometry">
     <rect>
-     <x>110</x>
+     <x>130</x>
      <y>20</y>
-     <width>701</width>
+     <width>681</width>
      <height>21</height>
     </rect>
    </property>
@@ -99,6 +99,12 @@
      <width>811</width>
      <height>311</height>
     </rect>
+   </property>
+   <property name="autoFillBackground">
+    <bool>true</bool>
+   </property>
+   <property name="undoRedoEnabled">
+    <bool>false</bool>
    </property>
   </widget>
   <widget class="QLineEdit" name="ip_edit">

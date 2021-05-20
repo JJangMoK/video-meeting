@@ -36,20 +36,20 @@ class FaceRec:
         encodesCurFrame = face_recognition.face_encodings(imgS, facesCurFrame)
 
         for encodeFace, faceLoc in zip(encodesCurFrame, facesCurFrame):
-            matches = face_recognition.\
-                compare_faces(self.encodeListKnown, encodeFace)
+            # matches = face_recognition.\
+            #     compare_faces(self.encodeListKnown, encodeFace)
             faceDis = face_recognition.\
                 face_distance(self.encodeListKnown, encodeFace)
-            matchIndex = np.argmin(faceDis)
+            # matchIndex = np.argmin(faceDis)
 
-            if matches[matchIndex]:
-                avgfaceDis = sum(faceDis)/5
-                self.avgfd.append(1 - avgfaceDis)
+            avgfaceDis = sum(faceDis)/len(faceDis)
+            self.avgfd.append(tuple([1-avgfaceDis, img]))
 
         return img
 
-    def clean_list(self):
-        self.avgfd = []
+    def clean_val(self):
+        self.avgfd.clear()
 
     def get_result(self):
-        return self.avgfd.copy()
+        print(self.avgfd)
+        return max(self.avgfd, key=lambda i: i[0])

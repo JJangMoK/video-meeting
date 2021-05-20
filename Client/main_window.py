@@ -7,13 +7,12 @@ from client import Client
 from threading import Lock
 from threading import Thread
 from alarm import Alarm
-import cv2
 
 
 form_class = uic.loadUiType("prototype.ui")[0]
 
 
-@Alarm(sec=10)
+@Alarm(sec=5)
 def recognize(recognizer, frame):
     recognizer.recognize(frame)
 
@@ -41,19 +40,30 @@ class TestWindow(QMainWindow, form_class):
         self.encoding_thread.start()
 
     def start_action(self):
-        if self.picture_edit.text() and self.zoom_edit.text()\
-           and self.ip_edit.text():
-
-            client = Client(self.ip_edit.text() + ":5000")
+        from confirm_dialog import ConfirmDialog
+        if self.picture_edit.text():
+            self.encoding_thread.join()
             try:
-                client.request_frame(lambda frame: recognize(self.rec, frame))
+                print("start")
+                client = Client(self.ip_edit.text() + ":5000")
+                self.rec.clean_val()
+                try:
+                    client.request_frame(lambda frame: recognize(self.rec, frame))
+                except Exception as e:
+                    self.__print_console(str(e.args))
+
+                result = self.rec.get_result()
+                self.__print_console(str(result[0]))
+                confirm = ConfirmDialog(self, result[1])
+                accepted = confirm.exec_()
+                if accepted:
+                    client.send_link(self.zoom_edit.text())
+                else:
+                    self.__print_console("canceled")
+                # need toplevel to get confirmation from user
             except Exception as e:
                 for message in e.args:
                     self.__print_console(str(message))
-                result = self.rec.get_result()
-                for val in result:
-                    self.__print_console(str(val))
-                client.send_link(self.zoom_edit.text())
 
     def __print_console(self, text: str):
         self.__console_lock.acquire()
